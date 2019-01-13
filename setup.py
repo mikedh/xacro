@@ -3,16 +3,8 @@ import os
 import inspect
 from setuptools import setup
 
-# get absolute path for version.py
-version = os.path.join(
-    os.path.dirname(
-        os.path.abspath(
-            inspect.getfile(
-                inspect.currentframe()))),
-    'xacro',
-    'version.py')
 # load __version__
-with open(version, 'r') as f:
+with open('xacro/version.py', 'r') as f:
     exec(f.read())
 
 # load README.md as long_description
