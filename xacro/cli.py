@@ -34,6 +34,7 @@ import textwrap
 from optparse import OptionParser, IndentedHelpFormatter
 from .color import colorize, warning, message
 
+
 class ColoredOptionParser(OptionParser):
     def error(self, message):
         msg = colorize(message, 'red')
@@ -41,11 +42,14 @@ class ColoredOptionParser(OptionParser):
 
 
 _original_wrap = textwrap.wrap
+
+
 def wrap_with_newlines(text, width, **kwargs):
     result = []
     for paragraph in text.split('\n'):
         result.extend(_original_wrap(paragraph, width, **kwargs))
     return result
+
 
 class IndentedHelpFormatterWithNL(IndentedHelpFormatter):
     def __init__(self, *args, **kwargs):
@@ -95,7 +99,8 @@ def process_args(argv, require_input=True):
     try:
         from rosgraph.names import load_mappings, REMAP
         mappings = load_mappings(argv)
-        filtered_args = [a for a in argv if REMAP not in a]  # filter-out REMAP args
+        # filter-out REMAP args
+        filtered_args = [a for a in argv if REMAP not in a]
     except ImportError as e:
         warning(e)
         mappings = {}
@@ -107,11 +112,17 @@ def process_args(argv, require_input=True):
         # --inorder is default, but it's incompatible to --includes
         options.in_order = not options.just_includes
     elif options.in_order == True:
-        warning("xacro: in-order processing became default in ROS Melodic. You can drop the option.")
+        warning(
+            "xacro: in-order processing became default in ROS Melodic. You can drop the option.")
     if options.in_order == False:
-        warning("xacro: Legacy processing is deprecated since ROS Jade and will be removed in N-turtle.")
-        message("To check for compatibility of your document, use option --check-order.", color='yellow')
-        message("For more infos, see http://wiki.ros.org/xacro#Processing_Order", color='yellow')
+        warning(
+            "xacro: Legacy processing is deprecated since ROS Jade and will be removed in N-turtle.")
+        message(
+            "To check for compatibility of your document, use option --check-order.",
+            color='yellow')
+        message(
+            "For more infos, see http://wiki.ros.org/xacro#Processing_Order",
+            color='yellow')
 
     if options.just_includes:
         warning("xacro: option --includes is deprecated")
